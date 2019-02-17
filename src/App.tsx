@@ -17,6 +17,9 @@ class App extends Component {
       const response = await fetch('https://data.metromobilite.fr/api/routers/default/index/stops/SEM:1602/stoptimes');
       const data = await response.json();
       this.setState({ buses: this.initBuses(data), isLoading: false });
+      setInterval(()=> {
+        this.setState({ buses: this.initBuses(data), isLoading: false });
+      }, 60000);
     } catch (error) {
       this.setState({ error: error.message, isLoading: false });
     }

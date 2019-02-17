@@ -1,0 +1,44 @@
+@import "../../common/style/variables.scss";
+
+.Bus {
+    background-color: $background-color-light;
+    width: 30%;
+
+    &__header {
+        border-bottom: 1px solid $black-12;
+
+        .avatar-C1 {
+            background-color: $primary-color;
+            color: $black-87;
+        }
+
+        .avatar-E1 {
+            background-color: $secondary-color;
+            color: $white-100;
+        }
+
+        .avatar-E2 {
+            background-color: $secondary-color;
+            color: $white-100;
+        }
+
+        .header-subheader {
+            display: flex;
+            justify-content: center;
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+        }
+    }
+
+    &__content {
+        &__first-bus {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+    }
+}

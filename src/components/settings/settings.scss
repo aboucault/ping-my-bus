@@ -1,0 +1,21 @@
+@import "../../common/style/variables.scss";
+
+.Settings {
+    display: flex;
+    justify-content: center;
+    color: $white-100;
+    font-size: 1.3rem;
+
+    &__time {
+        display: flex;
+        font-weight: 800;
+        margin-right: 6px;
+
+        .material-icons {
+            margin: 2px 6px 0 0;
+        }
+    }
+    &__stop {
+        font-weight: 300;
+    }
+}

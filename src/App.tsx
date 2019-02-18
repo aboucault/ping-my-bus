@@ -9,25 +9,22 @@ export const authorizedBuses = ['SEM:C1:15508', 'C38:EXP1:202481', 'C38:EXP2:202
 
 class App extends Component {
   state = {
-    buses: [] as IBusProps[], isLoading: true, error: null
+    buses: [] as IBusProps[],
+    isLoading: true,
+    error: null,
+    intervalId: setInterval(() => this.getBuses(), 10000)
   }
 
-  componentDidMount() {
-    try {
-      this.getBuses().then(response => response.json())
-                     .then(data => this.setState({ buses: this.initBuses(data), isLoading: false }));
-      
-      setInterval(()=> {
-        this.getBuses().then(response => response.json())
-                     .then(data => this.setState({ buses: this.initBuses(data), isLoading: false }));
-      }, 60000);
-    } catch (error) {
-      this.setState({ error, isLoading: false });
-    }
-  }
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
+}
 
   getBuses() {
-    return fetch('https://data.metromobilite.fr/api/routers/default/index/stops/SEM:1602/stoptimes');
+    fetch('https://data.metromobilite.fr/api/routers/default/index/stops/SEM:1602/stoptimes')
+      .then(response => response.json())
+      .then(data => {
+        this.setState({ buses: this.initBuses(data), isLoading: false });
+      });
   }
 
   getBusAvatar(id: string): string {

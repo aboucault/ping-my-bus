@@ -3,5 +3,10 @@ interface IBusProps {
     name: string;
     avatar: string;
     direction: string;
-    times: sting[];
+    times: ITimeProps[];
+}
+
+interface ITimeProps {
+    schedule: string;
+    hurry: boolean;
 }

@@ -12,7 +12,7 @@ class Settings extends Component {
         this.setNowDate();
         setInterval(()=> {
             this.setNowDate();
-        }, 60000);
+        }, 30000);
     }
 
     setNowDate(): void {

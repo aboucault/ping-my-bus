@@ -12,17 +12,22 @@ class App extends Component {
     buses: [] as IBusProps[], isLoading: true, error: null
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     try {
-      const response = await fetch('https://data.metromobilite.fr/api/routers/default/index/stops/SEM:1602/stoptimes');
-      const data = await response.json();
-      this.setState({ buses: this.initBuses(data), isLoading: false });
+      this.getBuses().then(response => response.json())
+                     .then(data => this.setState({ buses: this.initBuses(data), isLoading: false }));
+      
       setInterval(()=> {
-        this.setState({ buses: this.initBuses(data), isLoading: false });
+        this.getBuses().then(response => response.json())
+                     .then(data => this.setState({ buses: this.initBuses(data), isLoading: false }));
       }, 60000);
     } catch (error) {
-      this.setState({ error: error.message, isLoading: false });
+      this.setState({ error, isLoading: false });
     }
+  }
+
+  getBuses() {
+    return fetch('https://data.metromobilite.fr/api/routers/default/index/stops/SEM:1602/stoptimes');
   }
 
   getBusAvatar(id: string): string {
@@ -51,14 +56,21 @@ class App extends Component {
     }
   }
 
-  getBusTimes(times: any): string[] {
+  getBusTimes(times: any): ITimeProps[] {
     return times
-            .map((time: any) => new Date(time.realtimeArrival*1000).toISOString().slice(-13, -8))
+            .map((time: any) => {
+              const diffDate = new Date(time.realtimeArrival*1000).getTime() - new Date().getTime();
+              return {
+                schedule: new Date(time.realtimeArrival*1000).toISOString().slice(-13, -8),
+                hurry: new Date(diffDate).getMinutes() < 10
+              }
+            })
             .slice(0,3);
   }
 
-  initBuses(items: any) {
+  initBuses(items: any): IBusProps[] {
     const listOfBuses: IBusProps[] = [];
+    
     items.forEach((item: any) => {
       if (authorizedBuses.includes(item.pattern.id)) {
         listOfBuses.push({
@@ -77,7 +89,7 @@ class App extends Component {
     const { buses, isLoading, error } = this.state;
 
     if (error) {
-      return <div>{error}</div>;
+      return <div>Oups!</div>;
     }
 
     if (isLoading) {

@@ -20,14 +20,21 @@ class Bus extends Component<IBusProps, any> {
   }
 
   renderTimes() {
-    return this.bus.times.slice(1, this.bus.times.length).map((time: string, i: number) =>
+    return this.bus.times.slice(1, this.bus.times.length).map((time: ITimeProps, i: number) =>
       <Typography
         key={i}
         component="p"
       >
-        {time}
+        {time.schedule}
       </Typography>
     );
+  }
+
+  getTimeLeft(schedule: string): string {
+    const scheduleDate = schedule.split(':');
+    const scheduleMinutes = parseInt(scheduleDate[0]) * 60 + parseInt(scheduleDate[1]);
+    const timeLeft = ((scheduleMinutes - new Date().getHours() * 60 - new Date().getMinutes())).toString();
+    return timeLeft === '0' ? 'maintenant' : `dans ${timeLeft} minute${timeLeft !== '1' ? 's' : ''}`;
   }
 
   render() {
@@ -54,10 +61,10 @@ class Bus extends Component<IBusProps, any> {
         />
         <CardContent className="Bus__content">
           <Typography className="Bus__content__direction" color="textSecondary">
-            Prochain bus
+            Prochain bus {this.getTimeLeft(this.bus.times[0].schedule)}
           </Typography>
           <div className="Bus__content__first-bus">
-            {this.bus.times[0] ? <Icon>warning</Icon> : ''} {this.bus.times[0]}
+            {this.bus.times[0] && this.bus.times[0].hurry ? <Icon>warning</Icon> : ''} {this.bus.times[0].schedule}
           </div>
           <Typography className="Bus__content__direction" color="textSecondary">
             Bus suivants

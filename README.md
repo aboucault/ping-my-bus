@@ -1,4 +1,15 @@
+# Ping My Bus
+
+Ping My Bus is an application developed in React to get bus schedules at a precise stop.
+It's connected to Grenoble (France) bus API.
+
+## Current aspect
+
+<img src="https://github.com/aboucault/ping-my-bus/blob/master/images/2019-02-19%2014_38_41-Ping%20My%20Bus.png">
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+
+# Help to use it locally
 
 ## Available Scripts
 

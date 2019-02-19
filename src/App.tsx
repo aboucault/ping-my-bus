@@ -8,16 +8,22 @@ import Settings from './components/settings/settings';
 export const authorizedBuses = ['SEM:C1:15508', 'C38:EXP1:202481', 'C38:EXP2:202495'];
 
 class App extends Component {
+  intervalId: NodeJS.Timeout;
   state = {
     buses: [] as IBusProps[],
     isLoading: true,
-    error: null,
-    intervalId: setInterval(() => this.getBuses(), 10000)
+    error: null
+  }
+
+  constructor(props: any) {
+    super(props);
+    this.getBuses();
+    this.intervalId = setInterval(() => this.getBuses(), 10000)
   }
 
   componentWillUnmount() {
-    clearInterval(this.state.intervalId);
-}
+    clearInterval(this.intervalId);
+  }
 
   getBuses() {
     fetch('https://data.metromobilite.fr/api/routers/default/index/stops/SEM:1602/stoptimes')

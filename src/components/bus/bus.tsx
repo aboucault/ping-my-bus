@@ -12,15 +12,13 @@ import StarIcon from '@material-ui/icons/Star';
 import Icon from '@material-ui/core/Icon';
 
 class Bus extends Component<IBusProps, any> {
-  bus: any;
 
   constructor(props: IBusProps) {
     super(props);
-    this.bus = props;
   }
 
   renderTimes() {
-    return this.bus.times.slice(1, this.bus.times.length).map((time: ITimeProps, i: number) =>
+    return this.props.times.slice(1, this.props.times.length).map((time: ITimeProps, i: number) =>
       <Typography
         key={i}
         component="p"
@@ -43,8 +41,8 @@ class Bus extends Component<IBusProps, any> {
         <CardHeader
           className="Bus__header"
           avatar={
-            <Avatar aria-label="Ligne" className={`avatar-${this.bus.avatar}`}>
-              {this.bus.avatar}
+            <Avatar aria-label="Ligne" className={`avatar-${this.props.avatar}`}>
+              {this.props.avatar}
             </Avatar>
           }
           action={
@@ -53,18 +51,18 @@ class Bus extends Component<IBusProps, any> {
             </IconButton>
           }
           title={
-            <span className="header-title">{this.bus.name}</span>
+            <span className="header-title">{this.props.name}</span>
           }
           subheader={
-            <span className="header-subheader"><Icon>arrow_forward</Icon> {this.bus.direction}</span>
+            <span className="header-subheader"><Icon>arrow_forward</Icon> {this.props.direction}</span>
           }
         />
         <CardContent className="Bus__content">
           <Typography className="Bus__content__direction" color="textSecondary">
-            Prochain bus {this.getTimeLeft(this.bus.times[0].schedule)}
+            Prochain bus {this.getTimeLeft(this.props.times[0].schedule)}
           </Typography>
           <div className="Bus__content__first-bus">
-            {this.bus.times[0] && this.bus.times[0].hurry ? <Icon>warning</Icon> : ''} {this.bus.times[0].schedule}
+            {this.props.times[0] && this.props.times[0].hurry ? <span className="Bus__content__first-bus--danger"><Icon>timer</Icon>{this.props.times[0].schedule}</span> : this.props.times[0].schedule} 
           </div>
           <Typography className="Bus__content__direction" color="textSecondary">
             Bus suivants

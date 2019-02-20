@@ -40,6 +40,12 @@ class Bus extends Component<IBusProps, any> {
     return timeLeft === '0' ? 'maintenant' : `dans ${timeLeft} minute${timeLeft !== '1' ? 's' : ''}`;
   }
 
+  getFirstBusClass(firstBus: ITimeProps): string {
+    const hurry = firstBus && firstBus.hurry;
+    const hurryNow = hurry && firstBus.hurryNow;
+    return  hurry ? (hurryNow ? 'Bus__content__first-bus--hurry-now' : 'Bus__content__first-bus--hurry') : '';
+  }
+
   render() {
     return (
       <Card className="Bus">
@@ -67,7 +73,7 @@ class Bus extends Component<IBusProps, any> {
             Prochain bus {this.getTimeLeft(this.props.times[0].schedule)}
           </Typography>
           <div className="Bus__content__first-bus">
-            {this.props.times[0] && this.props.times[0].hurry ? <span className="Bus__content__first-bus--danger"><Icon>timer</Icon>{this.props.times[0].schedule}</span> : this.props.times[0].schedule} 
+            {this.props.times[0] ? <span className={this.getFirstBusClass(this.props.times[0])}><Icon>timer</Icon>{this.props.times[0].schedule}</span> : this.props.times[0].schedule} 
           </div>
           <Typography className="Bus__content__direction" color="textSecondary">
             Bus suivants

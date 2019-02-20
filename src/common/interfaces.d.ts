@@ -11,4 +11,5 @@ interface IBusProps {
 interface ITimeProps {
     schedule: string;
     hurry: boolean;
+    hurryNow: boolean;
 }

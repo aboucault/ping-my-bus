@@ -61,11 +61,14 @@ class App extends Component {
 
   getBusTimes(times: any): ITimeProps[] {
     return times
-            .map((time: any) => {
+            .map((time: any, index: number) => {
               const diffDate = new Date(time.realtimeArrival*1000).getTime() - new Date().getTime();
+              console.log('bus' + index,  new Date(diffDate).getMinutes());
+              
               return {
                 schedule: new Date(time.realtimeArrival*1000).toISOString().slice(-13, -8),
-                hurry: new Date(diffDate).getMinutes() < 10
+                hurry: new Date(diffDate).getMinutes() < 10,
+                hurryNow: new Date(diffDate).getMinutes() <= 1
               }
             })
             .slice(0,3);

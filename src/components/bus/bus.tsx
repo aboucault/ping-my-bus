@@ -11,10 +11,15 @@ import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import Icon from '@material-ui/core/Icon';
 
+export const busLine: any = {C38: 'TI', SEM: 'tag'};
+
 class Bus extends Component<IBusProps, any> {
 
   constructor(props: IBusProps) {
     super(props);
+  }
+
+  addToFavorite() {
   }
 
   renderTimes() {
@@ -42,11 +47,11 @@ class Bus extends Component<IBusProps, any> {
           className="Bus__header"
           avatar={
             <Avatar aria-label="Ligne" className={`avatar-${this.props.avatar}`}>
-              {this.props.avatar}
+              {busLine[this.props.avatar]}
             </Avatar>
           }
           action={
-            <IconButton>
+            <IconButton onClick={this.addToFavorite}>
               <StarIcon />
             </IconButton>
           }

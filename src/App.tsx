@@ -5,7 +5,7 @@ import './App.scss';
 import Bus from './components/bus/bus';
 import Settings from './components/settings/settings';
 
-export const authorizedBuses = ['SEM:C1:15508', 'C38:EXP1:202481', 'C38:EXP2:202495'];
+// export const authorizedBuses = ['SEM:C1:15508', 'C38:EXP1:202481', 'C38:EXP2:202495'];
 
 class App extends Component {
   intervalId: NodeJS.Timeout;
@@ -33,32 +33,6 @@ class App extends Component {
       });
   }
 
-  getBusAvatar(id: string): string {
-    switch(id) {
-      case 'SEM:C1:15508':
-        return 'C1'; 
-      case 'C38:EXP1:202481':
-        return 'E1'; 
-      case 'C38:EXP2:202495':
-        return 'E2'; 
-      default:
-        return id;
-    }
-  }
-
-  getBusName(id: string): string {
-    switch(id) {
-      case 'SEM:C1:15508':
-        return 'C1'; 
-      case 'C38:EXP1:202481':
-        return 'Express 1'; 
-      case 'C38:EXP2:202495':
-        return 'Express 2'; 
-      default:
-        return id;
-    }
-  }
-
   getBusTimes(times: any): ITimeProps[] {
     return times
             .map((time: any) => {
@@ -75,15 +49,14 @@ class App extends Component {
     const listOfBuses: IBusProps[] = [];
     
     items.forEach((item: any) => {
-      if (authorizedBuses.includes(item.pattern.id)) {
-        listOfBuses.push({
-          id: item.pattern.id,
-          name: this.getBusName(item.pattern.id),
-          avatar: this.getBusAvatar(item.pattern.id),
-          direction: item.pattern.shortDesc,
-          times: this.getBusTimes(item.times)
-        });
-      }
+      listOfBuses.push({
+        id: item.pattern.id,
+        avatar: item.pattern.id.split(':')[0],
+        direction: item.pattern.shortDesc,
+        favorite: false,
+        name: item.pattern.id.split(':')[1],
+        times: this.getBusTimes(item.times)
+      });
     });
     return listOfBuses;
   }
@@ -103,9 +76,10 @@ class App extends Component {
       <Bus
         key={i}
         id={bus.id}
-        name={bus.name} 
         avatar={bus.avatar} 
         direction={bus.direction} 
+        favorite={bus.favorite}
+        name={bus.name} 
         times={bus.times}
       />
     );
@@ -125,7 +99,12 @@ class App extends Component {
             <Settings />
           </div>
           <div className="App__content__bus">
-            {this.renderBusCards()}
+            <div className="App__content__bus__title">Mes bus</div>
+            <div  className="App__content__bus__section">
+              {this.renderBusCards()}
+            </div>
+            <div className="App__content__bus__title">Autres bus</div>
+            
           </div>
         </div>
       </div>

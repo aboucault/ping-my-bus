@@ -3,7 +3,6 @@
 .App {
   flex: 1 1 auto;
   flex-direction: column;
-  text-align: center;
   background-color: $background-color-dark;
 
   &__header {
@@ -12,7 +11,7 @@
     align-items: center;
     justify-content: center;
     font-size: calc(10px + 2vmin);
-    color: white;
+    color: $white-100;
 
     &__logo {
       animation: bounce .3s cubic-bezier(0.81, 0.06, 0.32, 0.91) 0s 4;
@@ -37,8 +36,22 @@
       width: 100%;
     }
     &__bus {
+      display: flex;
+      flex-direction: column;
       padding: 2% 0;
+
+      &__title {
+        color: $white-100;
+        padding: 0 1%;
+        margin-top: 2%;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+      }
+      &__content {
+        padding: 2% 0;
+      }
     }
+    
   }
 }
 
@@ -62,7 +75,7 @@
     min-height: 8vh;
   }
 
-  .App__content__bus {
+  .App__content__bus__section {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -78,7 +91,7 @@
     min-height: 10vh;
   }
 
-  .App__content__bus {
+  .App__content__bus__section {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

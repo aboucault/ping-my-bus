@@ -1,23 +1,19 @@
 @import "../../common/style/variables.scss";
 
 .Bus {
+    text-align: center;
     background-color: $background-color-light;
     margin: 2% 1%;
 
     &__header {
         border-bottom: 1px solid $black-12;
 
-        .avatar-C1 {
+        .avatar-SEM {
             background-color: $primary-color;
             color: $black-87;
         }
 
-        .avatar-E1 {
-            background-color: $secondary-color;
-            color: $white-100;
-        }
-
-        .avatar-E2 {
+        .avatar-C38 {
             background-color: $secondary-color;
             color: $white-100;
         }

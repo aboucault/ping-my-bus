@@ -14,12 +14,12 @@ import Icon from '@material-ui/core/Icon';
 export const busLine: any = {C38: 'TI', SEM: 'tag'};
 
 class Bus extends Component<IBusProps, any> {
-
   constructor(props: IBusProps) {
     super(props);
   }
 
   addToFavorite() {
+    this.props.manageFavorite(this.props.id);
   }
 
   renderTimes() {
@@ -51,7 +51,7 @@ class Bus extends Component<IBusProps, any> {
             </Avatar>
           }
           action={
-            <IconButton onClick={this.addToFavorite}>
+            <IconButton onClick={this.addToFavorite.bind(this)} className={`favorite-${this.props.favorite}`}>
               <StarIcon />
             </IconButton>
           }

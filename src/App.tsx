@@ -53,7 +53,8 @@ class App extends Component {
         id: item.pattern.id,
         avatar: item.pattern.id.split(':')[0],
         direction: item.pattern.shortDesc,
-        favorite: false,
+        favorite: this.isFavorite(item.pattern.id),
+        manageFavorite: this.manageFavorite,
         name: item.pattern.id.split(':')[1],
         times: this.getBusTimes(item.times)
       });
@@ -61,7 +62,45 @@ class App extends Component {
     return listOfBuses;
   }
 
-  renderBusCards() {
+  isFavorite(busId: string): boolean {
+    const favorites = localStorage.getItem('favoriteBuses');
+     if (favorites && favorites.includes(busId)) {
+      return true;
+     } else {
+       return false;
+     }
+  }
+
+  manageFavorite(busId: string) {
+    // init favorite buses - remove [] from array and quotes around each value
+    let favoriteBuses: string[] = [];
+    let favorites = localStorage.getItem('favoriteBuses');
+    if (favorites) {
+      favoriteBuses = favorites.substring(1, favorites.length - 1).split(',').map((bus: string) => bus.substring(1, bus.length - 1));
+    }
+
+    if(!favorites || (favorites && !favorites.includes(busId))) {
+      favoriteBuses.push(busId);
+    } else if(favorites && favorites.includes(busId)) {
+      const index: number = favoriteBuses.findIndex((id: string) => id === busId);
+      favoriteBuses.splice(index, 1);
+    }
+
+    favorites = JSON.stringify(favoriteBuses);
+    
+    const updatedBuses: IBusProps[] = this.state.buses.map((bus:IBusProps) => {
+      if (favorites && favorites.includes(bus.id)) {
+        bus.favorite = true;
+      } else {
+        bus.favorite = false;
+      }
+      return bus;
+    });
+    this.setState({ buses: updatedBuses });
+    localStorage.setItem('favoriteBuses', favorites);
+  }
+
+  renderBusCards(favorite: boolean) {
     const { buses, isLoading, error } = this.state;
 
     if (error) {
@@ -72,13 +111,15 @@ class App extends Component {
       return <div>Loading...</div>;
     }
 
-    return buses.map((bus: IBusProps, i: number) =>
+    return buses.filter((bus: IBusProps) => bus.favorite === favorite)
+                .map((bus: IBusProps, i: number) =>
       <Bus
         key={i}
         id={bus.id}
         avatar={bus.avatar} 
         direction={bus.direction} 
         favorite={bus.favorite}
+        manageFavorite={bus.manageFavorite}
         name={bus.name} 
         times={bus.times}
       />
@@ -101,10 +142,12 @@ class App extends Component {
           <div className="App__content__bus">
             <div className="App__content__bus__title">Mes bus</div>
             <div  className="App__content__bus__section">
-              {this.renderBusCards()}
+              {this.renderBusCards(true)}
             </div>
             <div className="App__content__bus__title">Autres bus</div>
-            
+            <div  className="App__content__bus__section">
+              {this.renderBusCards(false)}
+            </div>
           </div>
         </div>
       </div>

@@ -68,7 +68,7 @@
 }
 
 @keyframes blinker {
-    50% {
-      opacity: 20%;
-    }
+    to {
+        visibility: hidden;
+      }
   }

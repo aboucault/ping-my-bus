@@ -43,7 +43,7 @@ class Bus extends Component<IBusProps, any> {
   getFirstBusClass(firstBus: ITimeProps): string {
     const hurry = firstBus && firstBus.hurry;
     const hurryNow = hurry && firstBus.hurryNow;
-    return  hurry ? (hurryNow ? 'Bus__content__first-bus--hurry-now' : 'Bus__content__first-bus--hurry') : '';
+    return  (hurry || hurryNow) ? (hurryNow ? 'Bus__content__first-bus--hurry-now' : 'Bus__content__first-bus--hurry') : '';
   }
 
   render() {

@@ -18,7 +18,8 @@ class App extends Component {
   constructor(props: any) {
     super(props);
     this.getBuses();
-    this.intervalId = setInterval(() => this.getBuses(), 10000)
+    this.intervalId = setInterval(() => this.getBuses(), 10000);
+    this.manageFavorite = this.manageFavorite.bind(this);
   }
 
   componentWillUnmount() {

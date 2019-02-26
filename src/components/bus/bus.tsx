@@ -18,7 +18,7 @@ class Bus extends Component<IBusProps, any> {
     super(props);
   }
 
-  addToFavorite() {
+  addToFavorite = () => {
     this.props.manageFavorite(this.props.id);
   }
 
@@ -51,7 +51,7 @@ class Bus extends Component<IBusProps, any> {
             </Avatar>
           }
           action={
-            <IconButton onClick={this.addToFavorite.bind(this)} className={`favorite-${this.props.favorite}`}>
+            <IconButton onClick={this.addToFavorite} className={`favorite-${this.props.favorite}`}>
               <StarIcon />
             </IconButton>
           }

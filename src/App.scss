@@ -86,18 +86,31 @@
   }
 }
 
-@media screen and (min-width: 60em) {
+@media screen and (min-width: 60em) and (max-width: 80em) {
   .App__header {
     min-height: 10vh;
   }
-
   .App__content__bus__section {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
   }
    
   .Bus {
     flex: 0 1 calc(33% - 2em);
+  }
+}
+
+@media screen and (min-width: 80em) {
+  .App__header {
+    min-height: 10vh;
+  }
+  .App__content__bus__section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+   
+  .Bus {
+    flex: 0 1 calc(25% - 2em);
   }
 }

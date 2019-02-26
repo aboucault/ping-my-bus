@@ -4,6 +4,7 @@ import logo from './logo.svg';
 import './App.scss';
 import Bus from './components/bus/bus';
 import Settings from './components/settings/settings';
+import Icon from '@material-ui/core/Icon';
 
 // export const authorizedBuses = ['SEM:C1:15508', 'C38:EXP1:202481', 'C38:EXP2:202495'];
 
@@ -53,7 +54,7 @@ class App extends Component {
       listOfBuses.push({
         id: item.pattern.id,
         avatar: item.pattern.id.split(':')[0],
-        direction: item.pattern.shortDesc,
+        direction: item.pattern.desc,
         favorite: this.isFavorite(item.pattern.id),
         manageFavorite: this.manageFavorite,
         name: item.pattern.id.split(':')[1],
@@ -141,11 +142,11 @@ class App extends Component {
             <Settings />
           </div>
           <div className="App__content__bus">
-            <div className="App__content__bus__title">Mes bus</div>
+            <div className="App__content__bus__title"><Icon>star</Icon> Mes bus</div>
             <div  className="App__content__bus__section">
               {this.renderBusCards(true)}
             </div>
-            <div className="App__content__bus__title">Autres bus</div>
+            <div className="App__content__bus__title"><Icon>directions_bus</Icon> Autres bus</div>
             <div  className="App__content__bus__section">
               {this.renderBusCards(false)}
             </div>

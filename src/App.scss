@@ -41,11 +41,15 @@
       padding: 2% 0;
 
       &__title {
+        display: flex;
         color: $white-100;
         padding: 0 1%;
         margin-top: 2%;
         font-size: 1.1rem;
         text-transform: uppercase;
+        .material-icons {
+          margin-right: 1%;
+      }
       }
       &__content {
         padding: 2% 0;

@@ -44,7 +44,7 @@
                 display: none;
             }
 
-            &--hurry {
+            &--hurry, &--hurry-now {
                 display: flex;
                 align-items: center;
                 color: $warning-color;
@@ -57,18 +57,18 @@
             }
 
             &--hurry-now {
-                display: flex;
-                align-items: center;
-                color: $warning-color;
-                
-                animation: blinker 1.2s ease infinite;
+                animation: blinker normal 4s infinite ease-in-out;
             }
         }
     }
 }
 
 @keyframes blinker {
-    to {
-        visibility: hidden;
+    from, 50%, to {
+        opacity: 1;
+      }
+    
+      25%, 75% {
+        opacity: 0;
       }
   }

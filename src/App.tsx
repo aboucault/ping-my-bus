@@ -35,19 +35,23 @@ class App extends Component {
       });
   }
 
+
+// msg.payload = Math.floor(nextArrivalIn/60);
+
   getBusTimes(times: any): ITimeProps[] {
     return times
-            .map((time: any, index: number) => {
-              console.log();
+            .map((time: any) => {
+              // Message from preceeding node is in seconds - should be less than 24 hours (86400 seconds).
+              const today = new Date();
+              const todaySecs = today.getSeconds() + (60 * today.getMinutes()) + (60 * 60 * today.getHours());
+              // Pass on the string to the next node, what ever that may be. (groov Data Store for example).
+              const nextArrivalIn = time.realtimeArrival -todaySecs;
+              const diffDate = Math.floor(nextArrivalIn/60);
               
-              const diffDate = new Date(time.realtimeArrival*1000).getTime() - new Date().getTime();
-              console.log('bus' + index,  new Date(diffDate).getMinutes());
-              const diffMinutes = new Date(diffDate).getMinutes();
-
               return {
                 schedule: new Date(time.realtimeArrival*1000).toISOString().slice(-13, -8),
-                hurry: new Date(diffDate).getMinutes() < 10,
-                hurryNow: diffMinutes === 59 || diffMinutes <= 1
+                hurry: diffDate < 10,
+                hurryNow: diffDate <= 1
               }
             })
             .slice(0,3);

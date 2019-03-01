@@ -23,14 +23,14 @@ class Bus extends Component<IBusProps, any> {
   }
 
   renderTimes() {
-    return this.props.times.slice(1, this.props.times.length).map((time: ITimeProps, i: number) =>
+    return this.props.times[1] ? this.props.times.slice(1, this.props.times.length).map((time: ITimeProps, i: number) =>
       <Typography
         key={i}
         component="p"
       >
         {time.schedule}
       </Typography>
-    );
+    ) : <Typography component="p">Aucun bus à signaler dans l'heure !</Typography>;
   }
 
   getTimeLeft(schedule: string): string {

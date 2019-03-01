@@ -35,9 +35,6 @@ class App extends Component {
       });
   }
 
-
-// msg.payload = Math.floor(nextArrivalIn/60);
-
   getBusTimes(times: any): ITimeProps[] {
     return times
             .map((time: any) => {

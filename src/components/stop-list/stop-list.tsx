@@ -29,11 +29,10 @@ class StopList extends Component<IStopListProps, any> {
                     highlightedIndex,
                     selectedItem
                 }) => (
-                    <div>
-                        <label {...getLabelProps()}>Arrêt...</label> <br />
-                        <input {...getInputProps({ placeholder: "Chercher un arrêt" })} />
+                    <div className="stop-list__autocomplete">
+                        <input className="stop-list__autocomplete__input" {...getInputProps({ placeholder: "Chercher un arrêt" })} />
                         {isOpen ? (
-                            <div className="downshift-dropdown">
+                            <div className="stop-list__autocomplete__dropdown">
                                 {
                                     // filter the books and return items that match the inputValue
                                     this.props.stops
@@ -41,13 +40,13 @@ class StopList extends Component<IStopListProps, any> {
                                     // map the return value and return a div
                                     .map((item, index) => (
                                         <div
-                                        className="dropdown-item"
-                                        {...getItemProps({ key: item.label, index, item })}
-                                        style={{
-                                            backgroundColor: highlightedIndex === index ? 'lightgray' : 'white',
-                                            fontWeight: selectedItem === item ? 'bold' : 'normal',
-                                        }}>
-                                        {item.label}
+                                            className="stop-list__autocomplete__dropdown__item"
+                                            {...getItemProps({ key: item.label, index, item })}
+                                            style={{
+                                                backgroundColor: highlightedIndex === index ? 'lightgray' : 'white',
+                                                fontWeight: selectedItem === item ? 'bold' : 'normal'
+                                            }}>
+                                            {item.label}
                                         </div>
                                     ))
                                 }

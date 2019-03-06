@@ -3,7 +3,6 @@ import './settings.scss';
 
 import StopList from '../../components/stop-list/stop-list';
 import Icon from '@material-ui/core/Icon';
-import MenuItem from '@material-ui/core/MenuItem';
 
 class Settings extends Component {
     state = {
@@ -22,7 +21,6 @@ class Settings extends Component {
     }
 
     getStops() {
-        // https://data.metromobilite.fr/api/findType/json?types=pointArret
         fetch('https://data.metromobilite.fr/api/findType/json?types=arret')
             .then(response => response.json())
             .then((data: IBackendFeatures) => {
@@ -35,7 +33,8 @@ class Settings extends Component {
     
         stops.forEach((stop: any) => {
             listOfStops.push({
-                codes: [stop.properties.id],
+                city: stop.properties.COMMUNE,
+                codes: [stop.properties.CODE],
                 label: stop.properties.LIBELLE
             });
         });
@@ -77,9 +76,6 @@ class Settings extends Component {
         <div className="Settings">
             <div className="Settings__time">
                 <Icon>access_time</Icon> {this.state.nowDate}
-            </div>
-            <div className="Settings__stop">
-                | Victor Hugo
             </div>
             <StopList stops={this.state.stopList}/>
         </div>

@@ -14,6 +14,7 @@ interface IBusProps {
 }
 
 interface IStopList {
+    city: string;
     codes: string[];
     label: string;
     isDupplicate?: boolean;

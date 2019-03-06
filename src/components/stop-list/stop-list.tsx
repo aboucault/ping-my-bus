@@ -5,25 +5,39 @@ import './stop-list.scss';
 import Downshift from 'downshift';
 
 class StopList extends Component<IStopListProps, any> {
+    lastSelected = localStorage.getItem('lastSelectedStop') || null;
+
     constructor(props: IStopListProps) {
       super(props);
     }
+    
+    getPhysicalStops(name: string) {
+        fetch(`https://data.metromobilite.fr/api/findType/json?types=pointArret&query=${name}`)
+        .then(response => response.json())
+        .then((data: any) => {
+        console.log(data);
+    });
+    }
 
     onChange = (selectedStop: IStopList) => {
-        alert(`your favourite stop is ${selectedStop.label}`)
+        const selected = JSON.stringify(selectedStop);
+        localStorage.setItem('lastSelectedStop', selected);
+        this.getPhysicalStops(selectedStop.label);
     }
 
     renderDownshift() {
         return this.props.stops && this.props.stops.length > 0 ? (
             <Downshift
-                onChange={selection => alert(`You selected ${selection.label}`)}
+                onChange={selection => this.onChange(selection)}
+                onStateChange={state => this.setState({state})}
                 itemToString={item => (item ? item.label : '')}
                 onOuterClick={() => this.setState({menuIsOpen: false})}
+                selectedItem={this.lastSelected ? JSON.parse(this.lastSelected) : null}
+                inputValue={this.lastSelected ? JSON.parse(this.lastSelected).label : ''}
             >
                 {({
                     getInputProps,
                     getItemProps,
-                    getLabelProps,
                     isOpen,
                     inputValue,
                     highlightedIndex,
@@ -46,7 +60,7 @@ class StopList extends Component<IStopListProps, any> {
                                                 backgroundColor: highlightedIndex === index ? 'lightgray' : 'white',
                                                 fontWeight: selectedItem === item ? 'bold' : 'normal'
                                             }}>
-                                            {item.label}
+                                            {item.label} ({item.city})
                                         </div>
                                     ))
                                 }
@@ -62,7 +76,7 @@ class StopList extends Component<IStopListProps, any> {
     render() {
         return (
           <section className="stop-list">
-            {this.renderDownshift()}
+            | {this.renderDownshift()}
           </section>
         );
       }

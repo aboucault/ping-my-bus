@@ -7,30 +7,33 @@ import ClearIcon from '@material-ui/icons/Clear';
 import './stop-list.scss';
 
 class StopList extends Component<IStopListProps, any> {
-    lastSelected = localStorage.getItem('lastSelectedStop') || null;
-    isItemSelected = !!localStorage;
+    lastSelected: string | null;
+    isItemSelected: boolean;
 
     constructor(props: IStopListProps) {
-      super(props);
+        super(props);
+        this.lastSelected = localStorage.getItem('lastSelectedStop') || null;
+        this.isItemSelected = !!localStorage;
+        if(this.lastSelected) {
+            this.props.getPhysicalStops(JSON.parse(this.lastSelected).label);
+        }
     }
 
-    getPhysicalStops(name: string) {
-        fetch(`https://data.metromobilite.fr/api/findType/json?types=pointArret&query=${name}`)
-        .then(response => response.json())
-        .then((data: any) => {
-        console.log(data);
-    });
-    }
-
+    /**
+     * Select or unselect stops as input value changes
+     */
     onChange = (selectedStop: IStopList) => {
         if(selectedStop) {
             localStorage.setItem('lastSelectedStop', JSON.stringify(selectedStop));
-            this.getPhysicalStops(selectedStop.label);
             this.isItemSelected = true;
+            this.props.getPhysicalStops(selectedStop.label);
         }
         this.isItemSelected = false;
     }
 
+    /**
+     * Render the autocomplete
+     */
     renderDownshift() {
         return this.props.stops && this.props.stops.length > 0 ? (
             <Downshift
@@ -67,7 +70,7 @@ class StopList extends Component<IStopListProps, any> {
                         {isOpen ? (
                             <div className="stop-list__autocomplete__dropdown">
                                 {
-                                    // filter the books and return items that match the inputValue
+                                    // filter the stops and return items that match the inputValue
                                     this.props.stops
                                     .filter(item => !inputValue || item.label.toLowerCase().includes(inputValue.toLowerCase()))
                                     // map the return value and return a div
@@ -92,6 +95,9 @@ class StopList extends Component<IStopListProps, any> {
         ) : null;
     }
 
+    /**
+     * Render the component
+     */
     render() {
         return (
           <section className="stop-list">

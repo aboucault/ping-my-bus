@@ -20,7 +20,21 @@ class Settings extends Component {
         this.getStops();
     }
 
-    getStops() {
+    /**
+     * Get all physical stop corresponding to a stop label
+     */
+    getPhysicalStops(name: string): void {
+        fetch(`https://data.metromobilite.fr/api/findType/json?types=pointArret&query=${name}`)
+        .then(response => response.json())
+        .then((data: any) => {
+            console.log(data);
+        });
+    }
+
+    /**
+     * Get every stop
+     */
+    getStops(): void {
         fetch('https://data.metromobilite.fr/api/findType/json?types=arret')
             .then(response => response.json())
             .then((data: IBackendFeatures) => {
@@ -28,7 +42,10 @@ class Settings extends Component {
         });
     }
 
-    initStops(stops: IStop[]) {
+    /**
+     * Create a filtered list of unique stops
+     */
+    initStops(stops: IStop[]): IStopList[] {
         const listOfStops: IStopList[] = [];
     
         stops.forEach((stop: any) => {
@@ -63,21 +80,23 @@ class Settings extends Component {
                           });
     }
 
-    onStopSelection = (event: React.ChangeEvent<HTMLElement>) => {
-        this.setState({ selectedStop: event.target });
-    }
-
+    /**
+     * Set current time for the counter
+     */
     setNowDate(): void {
         this.setState({ nowDate: new Date().toLocaleTimeString().slice(0,5) });
     }
   
+    /**
+     * Render component
+     */
     render() {
         return (
         <div className="Settings">
             <div className="Settings__time">
                 <Icon>access_time</Icon> {this.state.nowDate}
             </div>
-            <StopList stops={this.state.stopList}/>
+            <StopList stops={this.state.stopList} getPhysicalStops={this.getPhysicalStops}/>
         </div>
         );
     }

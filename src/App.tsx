@@ -12,8 +12,7 @@ class App extends Component {
   intervalId: NodeJS.Timeout;
   state = {
     buses: [] as IBusProps[],
-    isLoading: true,
-    error: null
+    isLoading: true
   }
 
   constructor(props: any) {
@@ -110,11 +109,7 @@ class App extends Component {
   }
 
   renderBusCards(favorite: boolean) {
-    const { buses, isLoading, error } = this.state;
-
-    if (error) {
-      return <div>Oups!</div>;
-    }
+    const { buses, isLoading } = this.state;
 
     if (isLoading) {
       return <div>Loading...</div>;

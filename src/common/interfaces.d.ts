@@ -1,7 +1,4 @@
-interface IBackendFeatures {
-    type: string;
-    features: IStop[];
-}
+// Components Props
 
 interface IBusProps { 
     id: string;
@@ -13,6 +10,22 @@ interface IBusProps {
     times: ITimeProps[];
 }
 
+interface IStopListProps {
+    getPhysicalStops: (name: string) => void;
+    stops: IStopList[];
+}
+
+// ---
+
+// Backend features
+
+interface IBackendFeatures {
+    type: string;
+    features: IStop[];
+}
+
+// Stops
+
 interface IStopList {
     city: string;
     codes: string[];
@@ -20,21 +33,17 @@ interface IStopList {
     isDupplicate?: boolean;
 }
 
-interface IStopListProps {
-    stops: IStopList[];
-}
-
 interface IStop {
-    properties: IStopPropertiesProps;
-    geometry: IStopGeometryProps;
+    properties: IStopProperties;
+    geometry: IStopGeometry;
 }
 
-interface IStopGeometryProps {
+interface IStopGeometry {
     type: string;
     coordinates: number[];
 }
 
-interface IStopPropertiesProps {
+interface IStopProperties {
     CODE: string;
     id: string;
     LIBELLE: string;
@@ -45,6 +54,8 @@ interface IStopPropertiesProps {
     LeGresivaudan: boolean;
     PaysVoironnais: boolean;
 }
+
+// Time
 
 interface ITimeProps {
     schedule: string;

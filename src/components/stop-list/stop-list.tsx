@@ -1,16 +1,19 @@
 /// <reference path="../../common/interfaces.d.ts" />
-import React, { Component } from 'react';
-import './stop-list.scss';
+import React, { Component, ReactType } from 'react';
 
 import Downshift from 'downshift';
+import IconButton from '@material-ui/core/IconButton';
+import ClearIcon from '@material-ui/icons/Clear';
+import './stop-list.scss';
 
 class StopList extends Component<IStopListProps, any> {
     lastSelected = localStorage.getItem('lastSelectedStop') || null;
+    isItemSelected = !!localStorage;
 
     constructor(props: IStopListProps) {
       super(props);
     }
-    
+
     getPhysicalStops(name: string) {
         fetch(`https://data.metromobilite.fr/api/findType/json?types=pointArret&query=${name}`)
         .then(response => response.json())
@@ -20,20 +23,22 @@ class StopList extends Component<IStopListProps, any> {
     }
 
     onChange = (selectedStop: IStopList) => {
-        const selected = JSON.stringify(selectedStop);
-        localStorage.setItem('lastSelectedStop', selected);
-        this.getPhysicalStops(selectedStop.label);
+        if(selectedStop) {
+            localStorage.setItem('lastSelectedStop', JSON.stringify(selectedStop));
+            this.getPhysicalStops(selectedStop.label);
+            this.isItemSelected = true;
+        }
+        this.isItemSelected = false;
     }
 
     renderDownshift() {
         return this.props.stops && this.props.stops.length > 0 ? (
             <Downshift
                 onChange={selection => this.onChange(selection)}
-                onStateChange={state => this.setState({state})}
                 itemToString={item => (item ? item.label : '')}
                 onOuterClick={() => this.setState({menuIsOpen: false})}
-                selectedItem={this.lastSelected ? JSON.parse(this.lastSelected) : null}
-                inputValue={this.lastSelected ? JSON.parse(this.lastSelected).label : ''}
+                initialSelectedItem={this.lastSelected ? JSON.parse(this.lastSelected) : null}
+                initialInputValue={this.lastSelected ? JSON.parse(this.lastSelected).label : ''}
             >
                 {({
                     getInputProps,
@@ -41,10 +46,24 @@ class StopList extends Component<IStopListProps, any> {
                     isOpen,
                     inputValue,
                     highlightedIndex,
-                    selectedItem
+                    selectedItem,
+                    clearSelection
                 }) => (
                     <div className="stop-list__autocomplete">
-                        <input className="stop-list__autocomplete__input" {...getInputProps({ placeholder: "Chercher un arrêt" })} />
+                        <span className="stop-list__autocomplete__input-goup">
+                            <input
+                                className="stop-list__autocomplete__input-goup__input"
+                                {...getInputProps({ placeholder: "Chercher un arrêt", onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                                    if (e.target.value === '') {
+                                        clearSelection();
+                                    }
+                                }})}
+                            />
+                            {this.isItemSelected ? (<IconButton aria-label="Clear" onClick={() => clearSelection()}>
+                                <ClearIcon fontSize="small" />
+                            </IconButton>) : ''}
+                         </span>
+                        
                         {isOpen ? (
                             <div className="stop-list__autocomplete__dropdown">
                                 {
@@ -76,7 +95,7 @@ class StopList extends Component<IStopListProps, any> {
     render() {
         return (
           <section className="stop-list">
-            | {this.renderDownshift()}
+            {this.renderDownshift()}
           </section>
         );
       }

@@ -4,28 +4,39 @@
     display: flex;
 
     &__autocomplete {
+        border-left: 2px solid $white-50;
+        padding-left: 14px;
         margin-left: 6px;
         display: flex;
         flex-direction: column;
         color: $black-87;
 
-        &__input {
-            margin-top: 3px;
-            background-color: transparent;
-            border: none;
+        &__input-goup {
+            display: flex;
+            align-items: center;
             border-bottom: 1px solid $white-70;
-            font-size: 16px;
-            font: inherit;
-            color: $white-100;
-            width: 15rem;
 
-            &:focus {
-                outline: 0;
+            &__input {
+                margin-top: 3px;
+                background-color: transparent;
+                border: none;
+                font-size: 16px;
+                font: inherit;
+                color: $white-100;
+                width: 15rem;
+                &:focus {
+                    outline: 0;
+                }
+                
+            }
+            &:focus-within {
                 border-bottom-color: $primary-color;
             }
+    
+            button {
+                color: $white-100;
+            }
         }
-
-        
           
         &__dropdown {
             overflow: auto;

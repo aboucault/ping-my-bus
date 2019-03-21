@@ -4,12 +4,17 @@ import './settings.scss';
 import StopList from '../../components/stop-list/stop-list';
 import Icon from '@material-ui/core/Icon';
 
-class Settings extends Component {
+class Settings extends Component<ISettingsProps, any> {
     state = {
         nowDate: '',
         selectedStop: undefined,
         stops: [] as IStop[],
         stopList: [] as IStopList[]
+    }
+
+    constructor(props: ISettingsProps) {
+        super(props);
+        this.getPhysicalStops = this.getPhysicalStops.bind(this);
     }
 
     componentDidMount() {
@@ -26,8 +31,8 @@ class Settings extends Component {
     getPhysicalStops(name: string): void {
         fetch(`https://data.metromobilite.fr/api/findType/json?types=pointArret&query=${name}`)
         .then(response => response.json())
-        .then((data: any) => {
-            console.log(data);
+        .then((data: IPhysicalStopFeatures) => {
+            this.props.retrieveBuses(data.features);
         });
     }
 
@@ -37,7 +42,7 @@ class Settings extends Component {
     getStops(): void {
         fetch('https://data.metromobilite.fr/api/findType/json?types=arret')
             .then(response => response.json())
-            .then((data: IBackendFeatures) => {
+            .then((data: IStopFeatures) => {
             this.setState({ stops: data.features, stopList: this.initStops(data.features) });
         });
     }

@@ -10,6 +10,10 @@ interface IBusProps {
     times: ITimeProps[];
 }
 
+interface ISettingsProps {
+    retrieveBuses: (stops: IPhysicalStop[]) => void;
+}
+
 interface IStopListProps {
     getPhysicalStops: (name: string) => void;
     stops: IStopList[];
@@ -19,9 +23,14 @@ interface IStopListProps {
 
 // Backend features
 
-interface IBackendFeatures {
+interface IStopFeatures {
     type: string;
     features: IStop[];
+}
+
+interface IPhysicalStopFeatures {
+    type: string;
+    features: IPhysicalStop[];
 }
 
 // Stops
@@ -53,6 +62,24 @@ interface IStopProperties {
     LaMetro: boolean;
     LeGresivaudan: boolean;
     PaysVoironnais: boolean;
+}
+
+interface IPhysicalStop {
+    properties: IPhysicalStopProperties;
+    geometry: IStopGeometry;
+}
+
+interface IPhysicalStopProperties {
+    CODE: string;
+    id: string;
+    LIBELLE: string;
+    LaMetro: boolean;
+    LeGresivaudan: boolean;
+    PaysVoironnais: boolean;
+    PMR: number;
+    ZONE: string;
+    lgn: string;
+    type: string;
 }
 
 // Time

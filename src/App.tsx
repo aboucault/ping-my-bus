@@ -9,28 +9,32 @@ import Icon from '@material-ui/core/Icon';
 // export const authorizedBuses = ['SEM:C1:15508', 'C38:EXP1:202481', 'C38:EXP2:202495'];
 
 class App extends Component {
-  intervalId: NodeJS.Timeout;
   state = {
     buses: [] as IBusProps[],
-    isLoading: true
+    intervalId: undefined,
+    isLoading: true,
+    physicalStopIds: [] as string[]
   }
 
   constructor(props: any) {
     super(props);
-    this.getBuses();
-    this.intervalId = setInterval(() => this.getBuses(), 10000);
     this.manageFavorite = this.manageFavorite.bind(this);
+    this.retrieveBuses = this.retrieveBuses.bind(this);
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervalId);
+    clearInterval(this.state.intervalId);
   }
 
-  getBuses() {
-    fetch('https://data.metromobilite.fr/api/routers/default/index/stops/SEM:1602/stoptimes')
+  getBusesByStop(stopId: string, isFirstStop: boolean) {
+    fetch(`https://data.metromobilite.fr/api/routers/default/index/stops/${stopId}/stoptimes`)
       .then(response => response.json())
       .then(data => {
-        this.setState({ buses: this.initBuses(data), isLoading: false });
+        if(!isFirstStop && data && data.length > 0) {
+          this.setState({ buses: this.state.buses.concat(this.initBuses(data)), isLoading: false });
+        } else if(isFirstStop && data && data.length > 0) {
+          this.setState({ buses: this.initBuses(data), isLoading: false });
+        }
       });
   }
 
@@ -64,7 +68,7 @@ class App extends Component {
         favorite: this.isFavorite(item.pattern.id),
         manageFavorite: this.manageFavorite,
         name: item.pattern.id.split(':')[1],
-        times: this.getBusTimes(item.times)
+        times: (item.times && item.times.length > 0) ? this.getBusTimes(item.times) : []
       });
     });
     return listOfBuses;
@@ -130,6 +134,25 @@ class App extends Component {
     );
   }
 
+  /**
+   * Retrieve the bus list for each physical stop
+   * coresponding to the selected stop
+   */
+  retrieveBuses(physicalStops: IPhysicalStop[]): void {
+    // save the list to launch the interval
+    this.setState({ physicalStopIds: physicalStops.map((stop: IPhysicalStop) => stop.properties.CODE.replace(/_/g, ":")) });
+    
+    this.state.physicalStopIds.forEach((stopId: string, index: number) => {
+      this.getBusesByStop(stopId, index === 0);
+    });
+    // launch the interval to retrieve the bus list
+    this.setState({intervalId: setInterval(() => {
+      this.state.physicalStopIds.forEach((stopId: string, index: number) => {
+        this.getBusesByStop(stopId, index === 0);
+      });
+    }, 30000)});
+  }
+
   render() {
         return (
       <div className="App">
@@ -141,7 +164,7 @@ class App extends Component {
         </header>
         <div className="App__content">
           <div className="App__content__settings">
-            <Settings />
+            <Settings retrieveBuses={this.retrieveBuses}/>
           </div>
           <div className="App__content__bus">
             <div className="App__content__bus__title"><Icon>star</Icon> Mes bus</div>
